@@ -22,27 +22,27 @@ public abstract class Vehicle implements IVehicle {
 
     @Override
     public int getId() {
-        // return id
+        return this.id;
     }
  
     @Override
     public ILocation getLocation() {
-        // return location
+        return this.location;
     }
 
     @Override
     public ILocation getDestination() {
-        // return destination
+        return this.destination;
     }
     
     @Override
     public IService getService() {
-        // return service
+        return this.service;
     }
     
     @Override
     public IStatistics getStatistics() {
-        // return statistics
+       return this.statistics;
     }
     
     @Override
@@ -63,6 +63,9 @@ public abstract class Vehicle implements IVehicle {
     @Override
     public void startService() {
         // set destination to the service drop-off location, and status to "service"
+        this.destination = this.service.getDropoffLocation();
+        this.route = new Route(this.location, this.destination);
+        this.status = VehicleStatus.SERVICE;
     }
 
     @Override
@@ -91,16 +94,25 @@ public abstract class Vehicle implements IVehicle {
     @Override
     public void notifyArrivalAtPickupLocation() {
         // notify the company that the vehicle is at the pickup location and start the service
+        if (this.company != null) {
+            this.company.arrivedAtPickupLocation(this);
+        }
+        startService();
     }
         
     @Override
     public void notifyArrivalAtDropoffLocation() {
         // notify the company that the vehicle is at the drop off location and end the service
+        if (this.company != null) {
+            this.company.arrivedAtDropoffLocation(this);
+        }
+        endService();
      }
         
     @Override
     public boolean isFree() {
         // returns true if the status of the vehicle is "free" and false otherwise
+        return this.status == VehicleStatus.FREE;
     }   
     
     @Override
