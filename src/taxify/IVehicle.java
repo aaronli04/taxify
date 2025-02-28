@@ -14,7 +14,7 @@ public interface IVehicle extends IMovable {
     public void notifyArrivalAtPickupLocation();
     public void notifyArrivalAtDropoffLocation();
     public boolean isFree();
-    public int calculateCost();
+    public double calculateCost();
     public String toString();
     
 }

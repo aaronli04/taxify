@@ -150,7 +150,7 @@ public abstract class Vehicle implements IVehicle {
     }
 
     @Override
-    public int calculateCost() {
+    public double calculateCost() {
         return this.service.calculateDistance();
     }
 

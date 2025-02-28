@@ -10,7 +10,7 @@ public class Statistics implements IStatistics {
     private int ratings;
     private int stars;
     private int distance;
-    private int billing;
+    private double billing;
     
     /**
      * Constructs a Statistics object with all metrics initialized to zero.
@@ -72,7 +72,7 @@ public class Statistics implements IStatistics {
      * @return the total billing amount
      */
     @Override
-    public int getBilling() {
+    public double getBilling() {
         return this.billing;
     }
     
@@ -118,7 +118,7 @@ public class Statistics implements IStatistics {
      * @param billing the amount to add
      */
     @Override
-    public void updateBilling(int billing) {
+    public void updateBilling(double billing) {
         this.billing = this.billing + billing;
     }    
 }
