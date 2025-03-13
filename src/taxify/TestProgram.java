@@ -38,7 +38,7 @@ public class TestProgram {
         
         taxiCompany.addObserver(appSimulator);
         
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             appSimulator.requestService();
         }
 
@@ -47,7 +47,7 @@ public class TestProgram {
             appSimulator.show();
             appSimulator.update();
             
-            if (random.nextDouble() <= 0.3) {
+            if (random.nextDouble() <= 0.25) {
                 appSimulator.requestService();
             }
         }
