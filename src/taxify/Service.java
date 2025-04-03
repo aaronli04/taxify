@@ -9,6 +9,7 @@ public class Service implements IService {
     private ILocation pickup;
     private ILocation dropoff;
     private int stars;
+    private IServiceType serviceType;
     
     /**
      * Constructs a new Service instance with the specified user, pickup location, and dropoff location.
@@ -17,12 +18,14 @@ public class Service implements IService {
      * @param user   the user requesting the service
      * @param pickup the pickup location of the service
      * @param dropoff the dropoff location of the service
+     * @param serviceType the type of service requested
      */
-    public Service(IUser user, ILocation pickup, ILocation dropoff) {
+    public Service(IUser user, ILocation pickup, ILocation dropoff, IServiceType serviceType) {
         this.user = user;
         this.pickup = pickup;
         this.dropoff = dropoff; 
         this.stars = 0;
+        this.serviceType = serviceType;
     }
     
     /**
@@ -94,5 +97,15 @@ public class Service implements IService {
     @Override
     public String toString() {
         return this.getPickupLocation().toString() + " to " + this.getDropoffLocation().toString();
+    }
+
+    /**
+     * Gets the type of service requested.
+     *
+     * @return the type of service
+     */
+    @Override
+    public IServiceType getServiceType() {
+        return this.serviceType;
     }
 }

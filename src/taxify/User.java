@@ -117,8 +117,8 @@ public class User implements IUser {
      * Requests a taxi service from the associated taxi company.
      */
     @Override
-    public void requestService() {
-        this.company.provideService(this.id);
+    public void requestService(IServiceType serviceType) {
+        this.company.provideService(this.id, serviceType);
     }
     
     /**

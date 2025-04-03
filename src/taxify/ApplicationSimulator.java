@@ -1,6 +1,7 @@
 package taxify;
 
 import java.util.List;
+import java.time.LocalDate;
 
 public class ApplicationSimulator implements IApplicationSimulator, IObserver {
     private ITaxiCompany company;
@@ -59,7 +60,16 @@ public class ApplicationSimulator implements IApplicationSimulator, IObserver {
         // finds an available user and requests a service to the Taxi Company
         for (IUser user : users) {
             if (!user.getService()) {
-                user.requestService();
+                if (user.getGender() == 'F' || LocalDate.now().getYear() - user.getBirthDate().getYear() < 18) {
+                    // 50% chance request PinkServiceType
+                    if (Math.random() < 0.5) {
+                        user.requestService(new PinkServiceType());
+                    } else {
+                        user.requestService(new StandardServiceType());
+                    }
+                } else {
+                    user.requestService(new StandardServiceType());
+                }
                 return;
             }
         }

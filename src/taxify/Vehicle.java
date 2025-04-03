@@ -9,8 +9,9 @@ public abstract class Vehicle implements IVehicle {
     private ILocation destination;
     private IStatistics statistics;
     private IRoute route;
+    private IDriver driver;
         
-    public Vehicle(int id, ILocation location) {        
+    public Vehicle(int id, ILocation location, IDriver driver) {        
         this.id = id;
         this.service = null;
         this.status = VehicleStatus.FREE;
@@ -18,6 +19,7 @@ public abstract class Vehicle implements IVehicle {
         this.destination = ApplicationLibrary.randomLocation(this.location);
         this.statistics = new Statistics();
         this.route = new Route(this.location, this.destination);
+        this.driver = driver;
     }
 
     @Override
@@ -151,7 +153,7 @@ public abstract class Vehicle implements IVehicle {
 
     @Override
     public double calculateCost() {
-        return this.service.calculateDistance();
+        return this.service.calculateDistance() * this.service.getServiceType().getBaseFare();
     }
 
     @Override
@@ -160,4 +162,9 @@ public abstract class Vehicle implements IVehicle {
                ((this.status == VehicleStatus.FREE) ? " is free with path " + this.route.toString(): ((this.status == VehicleStatus.PICKUP) ?
                " to pickup user " + this.service.getUser().getId() : " in service "));
     }    
+
+    @Override
+    public IDriver getDriver() {
+        return this.driver;
+    }
 }

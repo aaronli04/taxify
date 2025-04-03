@@ -9,5 +9,6 @@ public interface IService {
     public void setStars(int stars);
     public int calculateDistance();
     public String toString();
+    public IServiceType getServiceType();
     
 }
