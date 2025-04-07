@@ -10,6 +10,7 @@ public class Service implements IService {
     private ILocation dropoff;
     private int stars;
     private IServiceType serviceType;
+    private RideMode rideMode;
     
     /**
      * Constructs a new Service instance with the specified user, pickup location, and dropoff location.
@@ -20,12 +21,13 @@ public class Service implements IService {
      * @param dropoff the dropoff location of the service
      * @param serviceType the type of service requested
      */
-    public Service(IUser user, ILocation pickup, ILocation dropoff, IServiceType serviceType) {
+    public Service(IUser user, ILocation pickup, ILocation dropoff, IServiceType serviceType, RideMode rideMode) {
         this.user = user;
         this.pickup = pickup;
         this.dropoff = dropoff; 
         this.stars = 0;
         this.serviceType = serviceType;
+        this.rideMode = rideMode;
     }
     
     /**
@@ -107,5 +109,25 @@ public class Service implements IService {
     @Override
     public IServiceType getServiceType() {
         return this.serviceType;
+    }
+
+    /**
+     * Gets the ride mode of the service.
+     *
+     * @return the ride mode
+     */
+    @Override
+    public RideMode getRideMode() {
+        return this.rideMode;
+    }
+
+    /**
+     * Gets the discount rate for the service.
+     *
+     * @return the discount rate
+     */
+    @Override
+    public double getDiscountRate() {
+        return 0.0;
     }
 }

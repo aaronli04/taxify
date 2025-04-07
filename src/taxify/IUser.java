@@ -12,8 +12,8 @@ public interface IUser {
     public boolean getService();
     public void setService(boolean service);
     public void setCompany(ITaxiCompany company);
-    public void requestService(IServiceType serviceType);
-    public void rateService(IService service);
+    public void requestService(IServiceType serviceType, RideMode rideMode);
+    public void rateService(IBaseService service);
     public String toString();
 
 }

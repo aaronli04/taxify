@@ -117,8 +117,8 @@ public class User implements IUser {
      * Requests a taxi service from the associated taxi company.
      */
     @Override
-    public void requestService(IServiceType serviceType) {
-        this.company.provideService(this.id, serviceType);
+    public void requestService(IServiceType serviceType, RideMode rideMode) {
+        this.company.provideService(this.id, serviceType, rideMode);
     }
     
     /**
@@ -129,11 +129,17 @@ public class User implements IUser {
      * @param service the service to be rated
      */
     @Override
-    public void rateService(IService service) {
+    public void rateService(IBaseService service) {
         // users rate around 50% of the services (1 to 5 stars)
         
         if (ApplicationLibrary.rand() % 2 == 0) {
-            service.setStars(ApplicationLibrary.rand(5) + 1);
+            if (service instanceof IService) {
+                IService taxiService = (IService) service;
+                taxiService.setStars(ApplicationLibrary.rand(5) + 1);
+            } else if (service instanceof ISharedService) {
+                ISharedService sharedService = (ISharedService) service;
+                sharedService.setStars(this, ApplicationLibrary.rand(5) + 1);
+            }
         }
     }
     

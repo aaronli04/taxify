@@ -35,7 +35,7 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
     }
 
     @Override
-    public boolean provideService(int user, IServiceType serviceType) {
+    public boolean provideService(int user, IServiceType serviceType, RideMode rideMode) {
         int userIndex = findUserIndex(user);
         int vehicleIndex = findFreeVehicle(userIndex, serviceType);
 
@@ -61,7 +61,7 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
 
             // create a service with the user, the pickup and the drop-off location
 
-            IService service = new Service(this.users.get(userIndex), origin, destination, serviceType);
+            IService service = new Service(this.users.get(userIndex), origin, destination, serviceType, rideMode);
 
             // assign the new service to the vehicle
 
@@ -87,7 +87,7 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
     public void arrivedAtPickupLocation(IVehicle vehicle) {
         // notify the observer a vehicle arrived at the pickup location
 
-        IService service = vehicle.getService();
+        IBaseService service = vehicle.getService();
         int user = service.getUser().getId();
 
         notifyObserver(
@@ -97,20 +97,37 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
     @Override
     public void arrivedAtDropoffLocation(IVehicle vehicle) {
         // a vehicle arrives at the drop-off location
+        IBaseService service = vehicle.getService();
 
-        IService service = vehicle.getService();
         int user = service.getUser().getId();
         int userIndex = findUserIndex(user);
 
-        // the taxi company requests the user to rate the service, and updates its
-        // status
+        if (service instanceof IService) {
+    
+            // the taxi company requests the user to rate the service, and updates its
+            // status
+    
+            this.users.get(userIndex).rateService(service);
+            this.users.get(userIndex).setService(false);
+    
+            // update the counter of services
+    
+            this.totalServices--;
+        } else if (service instanceof ISharedService) {
+            ISharedService sharedService = (ISharedService) service;
 
-        this.users.get(userIndex).rateService(service);
-        this.users.get(userIndex).setService(false);
+            // the taxi company requests the user to rate the service, and updates its status
+            this.users.get(userIndex).rateService(service);
+            this.users.get(userIndex).setService(false);
 
-        // update the counter of services
+            sharedService.removeUser();
+            sharedService.removeDropoffLocation();
 
-        this.totalServices--;
+            // no more users and drop-off locations, end the service
+            if (sharedService.getUsers().size() == 0 && sharedService.getDropoffLocations().size() == 0) {
+                this.totalServices--;
+            }
+        }
 
         notifyObserver(String.format("%-8s", vehicle.getClass().getSimpleName()) + vehicle.getId() + " drops off user "
                 + user);

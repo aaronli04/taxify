@@ -60,15 +60,21 @@ public class ApplicationSimulator implements IApplicationSimulator, IObserver {
         // finds an available user and requests a service to the Taxi Company
         for (IUser user : users) {
             if (!user.getService()) {
+                // Check if a shared ride can be offered
+                if (offerSharedRide(user)) {
+                    return;
+                }
+
+                RideMode rideMode = Math.random() < 0.5 ? RideMode.STANDARD : RideMode.SILENT;
                 if (user.getGender() == 'F' || LocalDate.now().getYear() - user.getBirthDate().getYear() < 18) {
                     // 50% chance request PinkServiceType
                     if (Math.random() < 0.5) {
-                        user.requestService(new PinkServiceType());
+                        user.requestService(new PinkServiceType(), rideMode);
                     } else {
-                        user.requestService(new StandardServiceType());
+                        user.requestService(new StandardServiceType(), rideMode);
                     }
                 } else {
-                    user.requestService(new StandardServiceType());
+                    user.requestService(new StandardServiceType(), rideMode);
                 }
                 return;
             }
@@ -83,5 +89,29 @@ public class ApplicationSimulator implements IApplicationSimulator, IObserver {
     @Override
     public void updateObserver(String message) {
         System.out.println(message);
+    }
+
+    private boolean offerSharedRide(IUser user) {
+        for (IVehicle vehicle : vehicles) {
+            if (vehicle.getService() instanceof IService && !vehicle.isFree() && vehicle instanceof Taxi && user.getService() == false) {
+                IService existingService = (IService) vehicle.getService();
+                ILocation userLocation = ApplicationLibrary.randomLocation();
+                ILocation userDestination = ApplicationLibrary.randomLocation(userLocation);
+                if (ApplicationLibrary.distance(vehicle.getLocation(), userLocation) < ApplicationLibrary.MINIMUM_DISTANCE) {
+                    if (Math.random() < 0.5) { // Randomize acceptance for existing user
+                        if (Math.random() < 0.5) { // Randomize acceptance for new user
+                            ISharedService sharedService = new SharedService(existingService);
+                            sharedService.addUser(user, userLocation);
+                            sharedService.addDropoffLocation(userDestination);
+                            vehicle.addDestination(userDestination);
+                            vehicle.setService(sharedService);
+                            updateObserver("Shared ride accepted for user " + user.getId() + " with vehicle " + vehicle.getId());
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

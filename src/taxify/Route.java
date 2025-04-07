@@ -47,6 +47,17 @@ public class Route implements IRoute {
     }
     
     /**
+     * Adds a new destination to the route dynamically.
+     * The route to the new destination is calculated and appended to the existing route.
+     *
+     * @param newDestination The new destination to add to the route.
+     */
+    public void addDestination(ILocation start, ILocation newDestination)
+    {
+        this.route.addAll(setRoute(start, newDestination));
+    }
+    
+    /**
      * Returns a string representation of the route, where each location
      * is represented as a string and separated by spaces.
      *
