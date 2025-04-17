@@ -3,6 +3,10 @@ package taxify;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * SharedService class implements the ISharedService interface and represents a shared service
+ * in the taxi company system. It adapts an existing service to support multiple users and dropoff locations.
+ */
 public class SharedService implements ISharedService {
     private IService originalService;
     private ArrayList<IUser> users;

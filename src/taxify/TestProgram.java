@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * TestProgram class is the main entry point for the application.
+ * It initializes the taxi company, creates users, drivers, and vehicles,
+ * and simulates the service requests and updates.
+ */
 public class TestProgram {
     private static final List<String> MALE_NAMES = List.of("John", "Michael", "David", "James", "Robert", "Daniel", "William", "Joseph", "Charles", "Matthew");
     private static final List<String> FEMALE_NAMES = List.of("Emily", "Jessica", "Sarah", "Ashley", "Amanda", "Elizabeth", "Samantha", "Jennifer", "Lauren", "Megan");

@@ -3,17 +3,31 @@ package taxify;
 import java.util.List;
 import java.time.LocalDate;
 
+/**
+ * ApplicationSimulator class simulates the application by managing the taxi
+ * company, users, and vehicles.
+ */
 public class ApplicationSimulator implements IApplicationSimulator, IObserver {
     private ITaxiCompany company;
     private List<IUser> users;
     private List<IVehicle> vehicles;
     
+    /**
+     * Constructor for ApplicationSimulator.
+     * 
+     * @param company The taxi company to be managed
+     * @param users List of users in the system
+     * @param vehicles List of vehicles in the system
+     */
     public ApplicationSimulator(ITaxiCompany company, List<IUser> users, List<IVehicle> vehicles) {
         this.company = company;
         this.users = users;
         this.vehicles = vehicles;
     }
     
+    /**
+     * Displays the current status of all vehicles in the system.
+     */
     @Override
     public void show() {
         // show the status of the vehicles
@@ -25,6 +39,10 @@ public class ApplicationSimulator implements IApplicationSimulator, IObserver {
         }   
     }
     
+    /**
+     * Displays statistics for all vehicles in the system including services completed,
+     * distance traveled, billing amount, reviews, and star ratings.
+     */
     @Override
     public void showStatistics() {
         // show the statistics of the company
@@ -46,6 +64,9 @@ public class ApplicationSimulator implements IApplicationSimulator, IObserver {
         System.out.println(s);        
     }    
 
+    /**
+     * Updates the position of all vehicles by moving them to their next location.
+     */
     @Override
     public void update() {
         // move vehicles to their next location
@@ -55,6 +76,11 @@ public class ApplicationSimulator implements IApplicationSimulator, IObserver {
         }
     }
 
+    /**
+     * Finds an available user and requests a service from the Taxi Company.
+     * Attempts to offer shared rides when possible and handles special service types
+     * like PinkService for female users and minors.
+     */
     @Override
     public void requestService() {        
         // finds an available user and requests a service to the Taxi Company
@@ -81,16 +107,32 @@ public class ApplicationSimulator implements IApplicationSimulator, IObserver {
         }
     }
     
+    /**
+     * Gets the total number of services completed by the company.
+     * 
+     * @return The total number of services
+     */
     @Override
     public int getTotalServices() {
         return this.company.getTotalServices();
     }
     
+    /**
+     * Updates the observer with a message about system events.
+     * 
+     * @param message The message to be displayed
+     */
     @Override
     public void updateObserver(String message) {
         System.out.println(message);
     }
 
+    /**
+     * Attempts to create a shared ride for a user with an existing service.
+     * 
+     * @param user The user requesting to join a shared ride
+     * @return true if a shared ride was successfully created, false otherwise
+     */
     private boolean offerSharedRide(IUser user) {
         for (IVehicle vehicle : vehicles) {
             if (vehicle.getService() instanceof IService && !vehicle.isFree() && vehicle instanceof Taxi && user.getService() == false) {

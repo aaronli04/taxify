@@ -2,6 +2,10 @@ package taxify;
 
 import java.util.ArrayList;
 
+/**
+ * An abstract class representing a vehicle in the taxi service system.
+ * Implements the IVehicle interface and provides base functionality for different types of vehicles.
+ */
 public abstract class Vehicle implements IVehicle {
     private int id;
     private ITaxiCompany company;
@@ -14,6 +18,13 @@ public abstract class Vehicle implements IVehicle {
     private IRoute route;
     private IDriver driver;
 
+    /**
+     * Constructs a new Vehicle with specified parameters.
+     * 
+     * @param id       The unique identifier for the vehicle
+     * @param location The initial location of the vehicle
+     * @param driver   The driver assigned to this vehicle
+     */
     public Vehicle(int id, ILocation location, IDriver driver) {
         this.id = id;
         this.service = null;
@@ -25,41 +36,71 @@ public abstract class Vehicle implements IVehicle {
         this.driver = driver;
     }
 
+    /**
+     * @return The unique identifier of the vehicle
+     */
     @Override
     public int getId() {
         return this.id;
     }
 
+    /**
+     * @return The current location of the vehicle
+     */
     @Override
     public ILocation getLocation() {
         return this.location;
     }
 
+    /**
+     * @return The current destination of the vehicle
+     */
     @Override
     public ILocation getDestination() {
         return this.destination;
     }
 
+    /**
+     * Adds a new destination to the vehicle's queue of destinations.
+     * 
+     * @param location The location to add as a destination
+     */
     @Override
     public void addDestination(ILocation location) {
         this.nextDestinations.add(location);
     }
 
+    /**
+     * @return The current service being performed by the vehicle
+     */
     @Override
     public IBaseService getService() {
         return this.service;
     }
 
+    /**
+     * @return The statistics for this vehicle
+     */
     @Override
     public IStatistics getStatistics() {
         return this.statistics;
     }
 
+    /**
+     * Sets the taxi company that this vehicle belongs to.
+     * 
+     * @param company The taxi company to assign
+     */
     @Override
     public void setCompany(ITaxiCompany company) {
         this.company = company;
     }
 
+    /**
+     * Assigns a service to this vehicle and prepares for pickup.
+     * 
+     * @param service The service to be picked up
+     */
     @Override
     public void pickService(IBaseService service) {
         // pick a service, set destination to the service pickup location, and status to
@@ -71,11 +112,19 @@ public abstract class Vehicle implements IVehicle {
         this.status = VehicleStatus.PICKUP;
     }
 
+    /**
+     * Sets the current service for this vehicle.
+     * 
+     * @param service The service to be set
+     */
     @Override
     public void setService(IBaseService service) {
         this.service = service;
     }
 
+    /**
+     * Starts the current service after picking up the passenger(s).
+     */
     @Override
     public void startService() {
         // set destination to the service drop-off location, and status to "service"
@@ -84,6 +133,9 @@ public abstract class Vehicle implements IVehicle {
         this.status = VehicleStatus.SERVICE;
     }
 
+    /**
+     * Ends the current service and updates vehicle statistics.
+     */
     @Override
     public void endService() {
         // update vehicle statistics
@@ -115,6 +167,9 @@ public abstract class Vehicle implements IVehicle {
         this.status = VehicleStatus.FREE;
     }
 
+    /**
+     * Notifies the company when the vehicle arrives at the pickup location.
+     */
     @Override
     public void notifyArrivalAtPickupLocation() {
         // notify the company that the vehicle is at the pickup location and start the
@@ -127,6 +182,10 @@ public abstract class Vehicle implements IVehicle {
 
     }
 
+    /**
+     * Notifies the company when the vehicle arrives at the dropoff location.
+     * For shared services, handles multiple dropoff locations.
+     */
     @Override
     public void notifyArrivalAtDropoffLocation() {
         // notify the company that the vehicle is at the drop off location and end the
@@ -152,12 +211,21 @@ public abstract class Vehicle implements IVehicle {
 
     }
 
+    /**
+     * Checks if the vehicle is available for new services.
+     * 
+     * @return true if the vehicle is free, false otherwise
+     */
     @Override
     public boolean isFree() {
         // returns true if the status of the vehicle is "free" and false otherwise
         return this.status == VehicleStatus.FREE;
     }
 
+    /**
+     * Moves the vehicle to the next location along its route.
+     * Handles arrival at pickup and dropoff locations.
+     */
     @Override
     public void move() {
         this.location = this.route.getNextLocation();
@@ -191,13 +259,20 @@ public abstract class Vehicle implements IVehicle {
         }
     }
 
-
+    /**
+     * Calculates the cost of the current service.
+     * 
+     * @return The calculated cost based on distance, base fare, and discount rate
+     */
     @Override
     public double calculateCost() {
         return this.service.calculateDistance() * this.service.getServiceType().getBaseFare()
                 * (1.0 - this.service.getDiscountRate());
     }
 
+    /**
+     * @return A string representation of the vehicle's current state
+     */
     @Override
     public String toString() {
         return this.id + " at " + this.location + " driving to " + this.destination +
@@ -206,6 +281,9 @@ public abstract class Vehicle implements IVehicle {
                                 : " in service "));
     }
 
+    /**
+     * @return The driver assigned to this vehicle
+     */
     @Override
     public IDriver getDriver() {
         return this.driver;

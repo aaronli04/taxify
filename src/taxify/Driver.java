@@ -2,6 +2,10 @@ package taxify;
 
 import java.time.LocalDate;
 
+/**
+ * Driver class implements the IDriver interface and represents a driver in the
+ * taxi company.
+ */
 public class Driver implements IDriver {
     private int id;
     private String firstName;
